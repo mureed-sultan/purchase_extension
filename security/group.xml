@@ -1,0 +1,26 @@
+<odoo>
+  <!-- Umbrella approver group that inherits Purchase Manager -->
+  <record id="group_purchase_approver" model="res.groups">
+    <field name="name">Purchase Approver</field>
+    <!-- inherit core purchase manager rights so approvers get proper perms -->
+    <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_manager'))]"/>
+  </record>
+
+  <!-- Branch Manager: can create/initiate requests (inherits basic purchase user) -->
+  <record id="group_branch_manager" model="res.groups">
+    <field name="name">Branch Manager (Purchases)</field>
+    <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+  </record>
+
+  <!-- Level 1 Approver (implies Purchase Approver) -->
+  <record id="group_purchase_approver_l1" model="res.groups">
+    <field name="name">Purchase Approver Level 1</field>
+    <field name="implied_ids" eval="[(4, ref('purchase_extension.group_purchase_approver'))]"/>
+  </record>
+
+  <!-- Level 2 Approver (implies Purchase Approver) -->
+  <record id="group_purchase_approver_l2" model="res.groups">
+    <field name="name">Purchase Approver Level 2</field>
+    <field name="implied_ids" eval="[(4, ref('purchase_extension.group_purchase_approver'))]"/>
+  </record>
+</odoo>
