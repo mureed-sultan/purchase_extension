@@ -31,9 +31,10 @@
 
                 <!-- Replace vendor field -->
                 <xpath expr="//field[@name='partner_id']" position="replace">
-                    <!-- Vendor only visible to GM -->
                     <field name="partner_id"
-                           groups="purchase_extension.group_general_manager"
+                           groups="purchase_extension.group_general_manager,
+                   purchase_extension.group_level1_approval,
+                   purchase_extension.group_level2_approval"
                            options="{'no_create': True}"
                            domain="[('supplier_rank','>',0)]"
                            required="1"/>
