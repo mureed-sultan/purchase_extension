@@ -9,6 +9,7 @@ class PurchaseOrder(models.Model):
         "purchase.vendor.line",
         "order_id",
         string="Vendor Assignments",
+        domain=[('vendor_id.supplier_rank', '>', 0)],  # only lines with vendor
     )
 
     approval_state = fields.Selection(
