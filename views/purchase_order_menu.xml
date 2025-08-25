@@ -1,0 +1,63 @@
+<odoo>
+    <!-- Root menu -->
+    <menuitem id="menu_purchase_request_root"
+              name="Purchase Request"
+              parent="purchase.menu_purchase_root"
+              sequence="15"/>
+
+    <!-- Branch Menu -->
+    <record id="action_purchase_orders_branch" model="ir.actions.act_window">
+        <field name="name">Purchase Orders</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('approval_state', 'in', ['draft', 'to_approve'])]</field>
+    </record>
+    <menuitem id="menu_purchase_orders_branch"
+              name="Purchase Orders"
+              parent="menu_purchase_request_root"
+              sequence="10"
+              action="action_purchase_orders_branch"
+              groups="purchase_extension.group_purchase_creator"/>
+
+    <!-- GM Menu -->
+    <record id="action_purchase_orders_gm" model="ir.actions.act_window">
+        <field name="name">GM Purchase Orders</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('approval_state', '=', 'to_approve')]</field>
+    </record>
+    <menuitem id="menu_purchase_orders_gm"
+              name="General Manager"
+              parent="menu_purchase_request_root"
+              sequence="20"
+              action="action_purchase_orders_gm"
+              groups="purchase_extension.group_general_manager"/>
+
+    <!-- Level1 Approval -->
+    <record id="action_purchase_orders_lvl1" model="ir.actions.act_window">
+        <field name="name">Level 1 Approval</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('approval_state', '=', 'gm_approved')]</field>
+    </record>
+    <menuitem id="menu_purchase_orders_lvl1"
+              name="Level 1 Approval"
+              parent="menu_purchase_request_root"
+              sequence="30"
+              action="action_purchase_orders_lvl1"
+              groups="purchase_extension.group_level1_approval"/>
+
+    <!-- Level2 Approval -->
+    <record id="action_purchase_orders_lvl2" model="ir.actions.act_window">
+        <field name="name">Level 2 Approval</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('approval_state', '=', 'level1_approved')]</field>
+    </record>
+    <menuitem id="menu_purchase_orders_lvl2"
+              name="Level 2 Approval"
+              parent="menu_purchase_request_root"
+              sequence="40"
+              action="action_purchase_orders_lvl2"
+              groups="purchase_extension.group_level2_approval"/>
+</odoo>

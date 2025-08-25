@@ -1,26 +1,22 @@
 <odoo>
-  <!-- Umbrella approver group that inherits Purchase Manager -->
-  <record id="group_purchase_approver" model="res.groups">
-    <field name="name">Purchase Approver</field>
-    <!-- inherit core purchase manager rights so approvers get proper perms -->
-    <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_manager'))]"/>
-  </record>
+    <!-- Purchase Creator -->
+    <record id="group_purchase_creator" model="res.groups">
+        <field name="name">Purchase Creator</field>
+        <!-- category_id removed -->
+    </record>
 
-  <!-- Branch Manager: can create/initiate requests (inherits basic purchase user) -->
-  <record id="group_branch_manager" model="res.groups">
-    <field name="name">Branch Manager (Purchases)</field>
-    <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
-  </record>
+    <!-- General Manager -->
+    <record id="group_general_manager" model="res.groups">
+        <field name="name">General Manager</field>
+    </record>
 
-  <!-- Level 1 Approver (implies Purchase Approver) -->
-  <record id="group_purchase_approver_l1" model="res.groups">
-    <field name="name">Purchase Approver Level 1</field>
-    <field name="implied_ids" eval="[(4, ref('purchase_extension.group_purchase_approver'))]"/>
-  </record>
+    <!-- Level 1 Approval -->
+    <record id="group_level1_approval" model="res.groups">
+        <field name="name">Level 1 Approval</field>
+    </record>
 
-  <!-- Level 2 Approver (implies Purchase Approver) -->
-  <record id="group_purchase_approver_l2" model="res.groups">
-    <field name="name">Purchase Approver Level 2</field>
-    <field name="implied_ids" eval="[(4, ref('purchase_extension.group_purchase_approver'))]"/>
-  </record>
+    <!-- Level 2 Approval -->
+    <record id="group_level2_approval" model="res.groups">
+        <field name="name">Level 2 Approval</field>
+    </record>
 </odoo>

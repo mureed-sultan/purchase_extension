@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_purchase_extension_purchase_extension,purchase_extension.purchase_extension,model_purchase_extension_purchase_extension,base.group_user,1,1,1,1
+access_purchase_order,purchase.order,model_purchase_order,base.group_user,1,1,1,1
+access_purchase_vendor_line,purchase.vendor.line,model_purchase_vendor_line,base.group_user,1,1,1,1

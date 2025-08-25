@@ -1,0 +1,29 @@
+<odoo>
+    <record id="view_purchase_vendor_line_list" model="ir.ui.view">
+        <field name="name">purchase.vendor.line.list</field>
+        <field name="model">purchase.vendor.line</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="product_id"/>
+                <field name="vendor_id"/>
+                <field name="quantity"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_purchase_vendor_line_form" model="ir.ui.view">
+        <field name="name">purchase.vendor.line.form</field>
+        <field name="model">purchase.vendor.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="product_id"/>
+                        <field name="vendor_id"/>
+                        <field name="quantity"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
