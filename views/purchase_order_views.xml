@@ -29,12 +29,20 @@
                             groups="purchase_extension.group_level2_approval"/>
                 </xpath>
 
+                <!-- Replace vendor field -->
+                <xpath expr="//field[@name='partner_id']" position="replace">
+                    <!-- Vendor only visible to GM -->
+                    <field name="partner_id"
+                           groups="purchase_extension.group_general_manager"
+                           options="{'no_create': True}"
+                           required="1"/>
+                </xpath>
+
                 <!-- Add approval state + vendor assignments -->
                 <xpath expr="//sheet" position="inside">
-            <group>
-    <field name="approval_state" readonly="1"/>
-</group>
-
+                    <group>
+                        <field name="approval_state" readonly="1"/>
+                    </group>
 
                     <notebook>
                         <page string="Vendor Assignments"
