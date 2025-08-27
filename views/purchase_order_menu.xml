@@ -1,16 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <data>
+
     <!-- Root menu -->
     <menuitem id="menu_purchase_request_root"
               name="Purchase Request"
               parent="purchase.menu_purchase_root"
               sequence="15"/>
 
-    <!-- Branch Menu -->
+    <!-- Branch (creator) -->
     <record id="action_purchase_orders_branch" model="ir.actions.act_window">
-        <field name="name">Purchase Orders</field>
-        <field name="res_model">purchase.order</field>
-        <field name="view_mode">list,form</field>
-        <field name="domain">[('approval_state', 'in', ['draft', 'to_approve'])]</field>
+      <field name="name">Purchase Orders</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">list,form</field>
+      <field name="domain">[('approval_state', 'in', ['draft', 'to_approve'])]</field>
     </record>
     <menuitem id="menu_purchase_orders_branch"
               name="Purchase Orders"
@@ -19,12 +22,12 @@
               action="action_purchase_orders_branch"
               groups="purchase_extension.group_purchase_creator"/>
 
-    <!-- GM Menu -->
+    <!-- GM Main -->
     <record id="action_purchase_orders_gm" model="ir.actions.act_window">
-        <field name="name">GM Purchase Orders</field>
-        <field name="res_model">purchase.order</field>
-        <field name="view_mode">list,form</field>
-        <field name="domain">[('approval_state', '=', 'to_approve')]</field>
+      <field name="name">GM Purchase Orders</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">list,form</field>
+      <field name="domain">[('approval_state', '=', 'to_approve')]</field>
     </record>
     <menuitem id="menu_purchase_orders_gm"
               name="General Manager"
@@ -33,12 +36,47 @@
               action="action_purchase_orders_gm"
               groups="purchase_extension.group_general_manager"/>
 
-    <!-- Level1 Approval -->
+    <!-- GM child menus -->
+    <menuitem id="menu_gm_orders_branch"
+              name="By Branch"
+              parent="menu_purchase_orders_gm"
+              action="action_purchase_orders_gm"
+              sequence="1"
+              groups="purchase_extension.group_general_manager"/>
+
+    <record id="action_gm_orders_product" model="ir.actions.act_window">
+      <field name="name">GM Product Requests</field>
+      <field name="res_model">purchase.order.line</field>
+      <field name="view_mode">list,form</field>
+      <field name="view_id" ref="view_purchase_order_line_list_for_gm"/>
+      <field name="domain">[('order_id.approval_state','=', 'to_approve')]</field>
+      <field name="context">{'group_by': 'product_id'}</field>
+    </record>
+    <menuitem id="menu_gm_orders_product"
+              name="By Product"
+              parent="menu_purchase_orders_gm"
+              sequence="2"
+              action="action_gm_orders_product"
+              groups="purchase_extension.group_general_manager"/>
+
+    <record id="action_gm_assignment_menu" model="ir.actions.act_window">
+      <field name="name">GM Assignments</field>
+      <field name="res_model">purchase.gm.assignment</field>
+      <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_gm_assignment_root"
+              name="GM Product Assignments"
+              parent="menu_purchase_orders_gm"
+              sequence="3"
+              action="action_gm_assignment_menu"
+              groups="purchase_extension.group_general_manager"/>
+
+    <!-- Level1 -->
     <record id="action_purchase_orders_lvl1" model="ir.actions.act_window">
-        <field name="name">Level 1 Approval</field>
-        <field name="res_model">purchase.order</field>
-        <field name="view_mode">list,form</field>
-        <field name="domain">[('approval_state', '=', 'gm_approved')]</field>
+      <field name="name">Level 1 Approval</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">list,form</field>
+      <field name="domain">[('approval_state', '=', 'gm_approved')]</field>
     </record>
     <menuitem id="menu_purchase_orders_lvl1"
               name="Level 1 Approval"
@@ -47,12 +85,12 @@
               action="action_purchase_orders_lvl1"
               groups="purchase_extension.group_level1_approval"/>
 
-    <!-- Level2 Approval -->
+    <!-- Level2 -->
     <record id="action_purchase_orders_lvl2" model="ir.actions.act_window">
-        <field name="name">Level 2 Approval</field>
-        <field name="res_model">purchase.order</field>
-        <field name="view_mode">list,form</field>
-        <field name="domain">[('approval_state', '=', 'level1_approved')]</field>
+      <field name="name">Level 2 Approval</field>
+      <field name="res_model">purchase.order</field>
+      <field name="view_mode">list,form</field>
+      <field name="domain">[('approval_state', '=', 'level1_approved')]</field>
     </record>
     <menuitem id="menu_purchase_orders_lvl2"
               name="Level 2 Approval"
@@ -60,4 +98,6 @@
               sequence="40"
               action="action_purchase_orders_lvl2"
               groups="purchase_extension.group_level2_approval"/>
+
+  </data>
 </odoo>

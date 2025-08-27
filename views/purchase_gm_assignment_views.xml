@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="view_gm_assignment_list" model="ir.ui.view">
+      <field name="name">purchase.gm.assignment.list</field>
+      <field name="model">purchase.gm.assignment</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="order_id"/>
+          <field name="product_id"/>
+          <field name="branch_id"/>
+          <field name="vendor_id"/>
+          <field name="quantity"/>
+        </list>
+      </field>
+    </record>
+
+    <record id="view_gm_assignment_form" model="ir.ui.view">
+      <field name="name">purchase.gm.assignment.form</field>
+      <field name="model">purchase.gm.assignment</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="order_id"/>
+              <field name="branch_id"/>
+              <field name="product_id"/>
+              <field name="vendor_id"/>
+              <field name="quantity"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="action_gm_assignment" model="ir.actions.act_window">
+      <field name="name">GM Assignments</field>
+      <field name="res_model">purchase.gm.assignment</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+  </data>
+</odoo>

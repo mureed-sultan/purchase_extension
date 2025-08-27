@@ -26,6 +26,8 @@ Long description of module's purpose
         'security/ir.model.access.csv',
         'views/purchase_order_views.xml',
         'views/purchase_vendor_line_views.xml',
+        'views/purchase_gm_assignment_views.xml',
+        'views/gm_product_views.xml',
         'views/purchase_order_menu.xml',
     ],
     # only loaded in demonstration mode
