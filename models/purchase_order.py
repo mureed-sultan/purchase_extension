@@ -6,12 +6,12 @@ class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     branch_id = fields.Many2one(
-        'res.company',  # Could be changed to your branch model if available
+        'res.company',
         string='Branch',
         required=True
     )
     vendor_assigned_ids = fields.One2many(
-        'purchase.vendor.line',  # Make sure this model exists
+        'purchase.vendor.line',
         'order_id',
         string="Vendor Assignments",
     )
@@ -30,7 +30,7 @@ class PurchaseOrder(models.Model):
     )
 
     def action_initiate_request(self):
-        """Purchase Creator initiates the request"""
+        """Purchase Creator initiates request"""
         for rec in self:
             if rec.approval_state != 'draft':
                 continue
@@ -38,15 +38,20 @@ class PurchaseOrder(models.Model):
             rec.message_post(body="Purchase request initiated by branch.")
 
     def action_gm_approve(self):
-        """General Manager approves product-wise"""
+        """General Manager assigns vendors per line"""
         for order in self:
             if order.approval_state != 'to_approve':
                 continue
-            # Check that all lines have GM vendor assigned
             unassigned_lines = order.order_line.filtered(lambda l: not l.gm_vendor_id)
             if unassigned_lines:
                 products = ", ".join(unassigned_lines.mapped("product_id.name"))
                 raise UserError(f"Please assign GM vendors for all products: {products}")
+
+            # Optional: auto-set partner_id if single vendor across lines
+            gm_vendors = order.order_line.mapped('gm_vendor_id')
+            if len(set(gm_vendors.ids)) == 1:
+                order.partner_id = gm_vendors[0]
+
             order.approval_state = 'gm_approved'
             order.message_post(body="GM approved. Order moved to Level 1 Approval.")
 
@@ -59,13 +64,30 @@ class PurchaseOrder(models.Model):
             rec.message_post(body="Level 1 approval granted.")
 
     def action_level2_approve(self):
-        """Level 2 Final Approval"""
-        for rec in self:
-            if rec.approval_state != 'level1_approved':
-                continue
+        """Level 2 Final Approval with multiple vendor handling"""
+        for rec in self.filtered(lambda r: r.approval_state == 'level1_approved'):
+            vendor_groups = {}
+            for line in rec.order_line:
+                if not line.gm_vendor_id:
+                    raise UserError(f"Line {line.product_id.name} has no GM vendor assigned.")
+                vendor_groups.setdefault(line.gm_vendor_id.id, []).append(line)
+
+            for vendor_id, lines in vendor_groups.items():
+                if len(vendor_groups) > 1:
+                    # Split PO per vendor
+                    new_po = rec.copy(default={
+                        'partner_id': vendor_id,
+                        'order_line': [(6, 0, [l.id for l in lines])]
+                    })
+                    new_po.button_confirm()
+                    new_po.message_post(body="Level 2 approval granted. PO confirmed.")
+                else:
+                    # Single vendor, confirm original PO
+                    rec.partner_id = vendor_id
+                    rec.button_confirm()
+                    rec.message_post(body="Level 2 approval granted. PO confirmed.")
+
             rec.approval_state = 'level2_approved'
-            rec.button_confirm()
-            rec.message_post(body="Level 2 approval granted. PO confirmed.")
 
 
 class PurchaseOrderLine(models.Model):
